@@ -16,27 +16,21 @@ var defaultCaller = &callerStore{
 }
 
 type callerStore struct {
-	Name         string
-	IsBackground bool
-	caller       sync.Map
-	cfg          Cfg
-}
-
-type Client struct {
-	*mgo.Database
+	Name   string
+	caller sync.Map
+	cfg    Cfg
 }
 
 func Register() common.Caller {
-
 	return defaultCaller
 }
 
-func Caller(name string) *Client {
+func Caller(name string) *mgo.Database {
 	obj, ok := defaultCaller.caller.Load(name)
 	if !ok {
 		return nil
 	}
-	return obj.(*Client)
+	return obj.(*mgo.Database)
 }
 
 func (c *callerStore) InitCfg(cfg []byte) error {
@@ -57,16 +51,15 @@ func (c *callerStore) InitCaller() error {
 	return nil
 }
 
-func provider(cfg CallerCfg) (resp *Client, err error) {
+func provider(cfg CallerCfg) (resp *mgo.Database, err error) {
 	session, err := mgo.Dial(cfg.URL)
 	if err != nil {
 		fmt.Println(err.Error())
 		os.Exit(-1)
 	}
-	fmt.Println("cfg.debug", cfg.Debug)
 	mgo.SetDebug(cfg.Debug)
 	// Optional. Switch the session to a monotonic behavior.
 	session.SetMode(mgo.Monotonic, true)
 
-	return &Client{session.DB(cfg.Database)}, err
+	return session.DB(cfg.Database), err
 }

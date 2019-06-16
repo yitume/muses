@@ -15,6 +15,7 @@ type CallerCfg struct {
 	Addr            string
 	ReadTimeout     common.Duration
 	WriteTimeout    common.Duration
+	MaxHeaderBytes  int
 	EnabledRecovery bool
 	EnabledLogger   bool
 	EnabledMetric   bool

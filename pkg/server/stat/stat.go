@@ -1,28 +1,23 @@
 package stat
 
 import (
-	"fmt"
+	"github.com/BurntSushi/toml"
 	"github.com/gin-gonic/gin"
 	"github.com/yitume/muses/pkg/common"
 	"github.com/yitume/muses/pkg/logger"
 	"github.com/zsais/go-gin-prometheus"
-	"net/http"
-
-	"github.com/BurntSushi/toml"
 	"go.uber.org/zap"
+	"net/http"
 )
 
 var defaultCaller = &callerStore{
-	Name:         "stat",
-	IsBackground: true,
+	Name: common.ModStatName,
 }
 
 type callerStore struct {
-	Name         string
-	IsNecessary  bool
-	IsBackground bool
-	caller       *Client
-	cfg          Cfg
+	Name   string
+	caller *Client
+	cfg    Cfg
 }
 
 type Client struct {
@@ -30,7 +25,6 @@ type Client struct {
 }
 
 func Register() common.Caller {
-
 	return defaultCaller
 }
 
@@ -48,14 +42,16 @@ func (c *callerStore) InitCaller() error {
 		ReadTimeout:  c.cfg.Muses.Server.Stat.ReadTimeout.Duration,
 		WriteTimeout: c.cfg.Muses.Server.Stat.WriteTimeout.Duration,
 	}
-	defer func() {
-		serverStats.Close()
+
+	go func() {
+		defer func() {
+			serverStats.Close()
+		}()
+		if err := serverStats.ListenAndServe(); err != nil {
+			logger.DefaultLogger().Error("ServerApi err", zap.String("err", err.Error()))
+		}
 	}()
 	c.caller = &Client{serverStats}
-	if err := serverStats.ListenAndServe(); err != nil {
-		fmt.Println(err.Error())
-		logger.DefaultLogger().Error("ServerApi err", zap.String("err", err.Error()))
-	}
 
 	return nil
 }

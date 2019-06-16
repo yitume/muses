@@ -2,7 +2,6 @@ package echosession
 
 import (
 	"github.com/BurntSushi/toml"
-	"github.com/gin-gonic/gin"
 	"github.com/ipfans/echo-session"
 	"github.com/labstack/echo"
 	session "github.com/sevenNt/echo-session"
@@ -17,19 +16,15 @@ var defaultCaller = &callerStore{
 type callerStore struct {
 	Name         string
 	IsBackground bool
-	caller       *Client
+	caller       echo.MiddlewareFunc
 	cfg          Cfg
-}
-
-type Client struct {
-	echo.MiddlewareFunc
 }
 
 func Register() common.Caller {
 	return defaultCaller
 }
 
-func Caller() *Client {
+func Caller() echo.MiddlewareFunc {
 	return defaultCaller.caller
 }
 
@@ -45,7 +40,7 @@ func (c *callerStore) InitCaller() error {
 	if err != nil {
 		return err
 	}
-	c.caller = &Client{db}
+	c.caller = db
 	return nil
 }
 

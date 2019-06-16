@@ -28,7 +28,6 @@ type Client struct {
 }
 
 func Register() common.Caller {
-
 	return defaultCaller
 }
 

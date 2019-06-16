@@ -14,10 +14,9 @@ var defaultCaller = &callerStore{
 }
 
 type callerStore struct {
-	Name         string
-	IsBackground bool
-	caller       *gin.Engine
-	cfg          Cfg
+	Name   string
+	caller *gin.Engine
+	cfg    Cfg
 }
 
 func Register() common.Caller {

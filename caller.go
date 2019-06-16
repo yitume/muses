@@ -1,7 +1,6 @@
 package muses
 
 import (
-	"errors"
 	"io/ioutil"
 	"reflect"
 
@@ -10,20 +9,20 @@ import (
 
 // 通过反射取包里面的值
 var orderCallerList = []callerAttr{
-	{true, common.ModAppName},
-	{true, common.ModLoggerName},
-	{false, common.ModMysqlName},
-	{false, common.ModRedisName},
-	{false, common.ModMongoName},
-	{false, common.ModGinSessionName},
-	{false, common.ModEchoSessionName},
-	{false, common.ModStatName},
-	{false, common.ModGinName},
+	{common.ModAppName},
+	{common.ModLoggerName},
+	{common.ModPromName},
+	{common.ModMysqlName},
+	{common.ModRedisName},
+	{common.ModMongoName},
+	{common.ModGinSessionName},
+	{common.ModEchoSessionName},
+	{common.ModStatName},
+	{common.ModGinName},
 }
 
 type callerAttr struct {
-	IsNecessary bool
-	Name        string
+	Name string
 }
 
 // Container from file.
@@ -47,13 +46,7 @@ func sortCallers(callers []common.CallerFunc) (callerSort []common.Caller, err e
 
 	for _, value := range orderCallerList {
 		caller, ok := callerMap[value.Name]
-		if !ok {
-			// 如果是必须加载的组件
-			if value.IsNecessary {
-				err = errors.New(value.Name + " is not exist")
-				return
-			}
-		} else {
+		if ok {
 			// 如果存在于map，加入到排序里的caller sort
 			callerSort = append(callerSort, caller)
 		}
@@ -63,8 +56,4 @@ func sortCallers(callers []common.CallerFunc) (callerSort []common.Caller, err e
 
 func getCallerName(caller common.Caller) string {
 	return reflect.ValueOf(caller).Elem().FieldByName("Name").String()
-}
-
-func isCallerBackground(caller common.Caller) bool {
-	return reflect.ValueOf(caller).Elem().FieldByName("IsBackground").Bool()
 }

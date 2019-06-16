@@ -5,6 +5,7 @@ const MetricPrefix = "yitu"
 
 const ModAppName = "app"
 const ModLoggerName = "logger"
+const ModPromName = "prom"
 const ModMysqlName = "mysql"
 const ModRedisName = "redis"
 const ModMongoName = "mongo"

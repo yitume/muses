@@ -3,6 +3,7 @@ package prom
 import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/yitume/muses/pkg/app"
+	"github.com/yitume/muses/pkg/common"
 )
 
 var (
@@ -13,6 +14,30 @@ var (
 
 	AppBuildInfo = NewPromCounter("yitu_app_build_info", []string{"app", "env", "version"})
 )
+
+// toodo prometheus也要初始化
+var defaultCaller = &callerStore{
+	Name: common.ModPromName,
+}
+
+type callerStore struct {
+	Name string
+	cfg  Cfg
+}
+
+func Register() common.Caller {
+	return defaultCaller
+}
+
+func (c *callerStore) InitCfg(cfg []byte) error {
+	return nil
+}
+
+func (c *callerStore) InitCaller() error {
+	// 信息初始化到prometheus
+	AppBuildInfo.Set(app.Config().Muses.App.Version)
+	return nil
+}
 
 // Prom struct info
 type PromTimer struct {

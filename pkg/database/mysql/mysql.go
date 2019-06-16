@@ -15,14 +15,12 @@ var defaultCaller = &callerStore{
 }
 
 type callerStore struct {
-	Name         string
-	IsBackground bool
-	caller       sync.Map
-	cfg          Cfg
+	Name   string
+	caller sync.Map
+	cfg    Cfg
 }
 
 func Register() common.Caller {
-
 	return defaultCaller
 }
 

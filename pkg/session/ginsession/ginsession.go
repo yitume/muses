@@ -16,19 +16,15 @@ type callerStore struct {
 	Name         string
 	IsNecessary  bool
 	IsBackground bool
-	caller       *Client
+	caller       gin.HandlerFunc
 	cfg          Cfg
-}
-
-type Client struct {
-	gin.HandlerFunc
 }
 
 func Register() common.Caller {
 	return defaultCaller
 }
 
-func Caller() *Client {
+func Caller() gin.HandlerFunc {
 	return defaultCaller.caller
 }
 
@@ -44,7 +40,7 @@ func (c *callerStore) InitCaller() error {
 	if err != nil {
 		return err
 	}
-	c.caller = &Client{db}
+	c.caller = db
 	return nil
 }
 

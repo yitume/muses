@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/jinzhu/gorm"
 	"github.com/yitume/muses"
 	"github.com/yitume/muses/pkg/app"
 	"github.com/yitume/muses/pkg/cache/redis"
@@ -78,7 +79,7 @@ var cfg = `
     keypairs = "secret"
 `
 var (
-	Db *mysql.Client
+	Db *gorm.DB
 )
 
 func main() {
@@ -88,10 +89,10 @@ func main() {
 		mysql.Register,
 		mongo.Register,
 		redis.Register,
-		gin.Register,
 		ginsession.Register,
 		logger.Register,
 		stat.Register,
+		gin.Register,
 	); err != nil {
 		panic(err)
 	}
