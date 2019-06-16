@@ -21,21 +21,17 @@ type callerStore struct {
 	cfg          Cfg
 }
 
-type Client struct {
-	*gorm.DB
-}
-
 func Register() common.Caller {
 
 	return defaultCaller
 }
 
-func Caller(name string) *Client {
+func Caller(name string) *gorm.DB {
 	obj, ok := defaultCaller.caller.Load(name)
 	if !ok {
 		return nil
 	}
-	return obj.(*Client)
+	return obj.(*gorm.DB)
 }
 
 func (c *callerStore) InitCfg(cfg []byte) error {
@@ -56,7 +52,7 @@ func (c *callerStore) InitCaller() error {
 	return nil
 }
 
-func provider(cfg CallerCfg) (resp *Client, err error) {
+func provider(cfg CallerCfg) (resp *gorm.DB, err error) {
 	var db *gorm.DB
 	// dsn = "username:password@tcp(addr)/stt_config?charset=utf8&parseTime=True&loc=Local&readTimeout=1s&timeout=1s&writeTimeout=1s"
 	db, err = gorm.Open(cfg.Dialect, cfg.Username+":"+cfg.Password+"@"+cfg.Network+"("+cfg.Addr+")/"+cfg.Db+
@@ -74,6 +70,6 @@ func provider(cfg CallerCfg) (resp *Client, err error) {
 	if err != nil {
 		return
 	}
-	resp = &Client{db}
+	resp = db
 	return
 }
