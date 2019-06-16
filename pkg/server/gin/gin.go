@@ -16,19 +16,15 @@ var defaultCaller = &callerStore{
 type callerStore struct {
 	Name         string
 	IsBackground bool
-	caller       *Client
+	caller       *gin.Engine
 	cfg          Cfg
-}
-
-type Client struct {
-	*gin.Engine
 }
 
 func Register() common.Caller {
 	return defaultCaller
 }
 
-func Caller() *Client {
+func Caller() *gin.Engine {
 	return defaultCaller.caller
 }
 
@@ -55,6 +51,6 @@ func (c *callerStore) InitCaller() error {
 		r.Use(ginzap.RecoveryWithZap(true))
 	}
 
-	c.caller = &Client{r}
+	c.caller = r
 	return nil
 }
