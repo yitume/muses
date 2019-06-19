@@ -17,6 +17,7 @@ var orderCallerList = []callerAttr{
 	{common.ModMongoName},
 	{common.ModGinSessionName},
 	{common.ModEchoSessionName},
+	{common.ModTmplBeegoName},
 	{common.ModStatName},
 	{common.ModGinName},
 }
