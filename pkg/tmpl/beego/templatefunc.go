@@ -249,9 +249,10 @@ func Htmlunquote(text string) string {
 //	/user/John%20Doe
 //
 //  more detail http://beego.me/docs/mvc/controller/urlbuilding.md
-//func URLFor(endpoint string, values ...interface{}) string {
-//	return BeeApp.Handlers.URLFor(endpoint, values...)
-//}
+func URLFor(endpoint string, values ...interface{}) string {
+	//todo
+	return endpoint
+}
 
 // AssetsJs returns script tag with src string.
 func AssetsJs(text string) template.HTML {
