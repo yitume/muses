@@ -1,15 +1,15 @@
-package beego
+package tplbeego
 
 type Cfg struct {
 	Muses CallerMuses `toml:"muses"`
 }
 
 type CallerMuses struct {
-	Tmpl CallerTmpl `toml:"tmpl"`
+	Tpl CallerTpl `toml:"tpl"`
 }
 
-type CallerTmpl struct {
-	Beego CallerCfg `toml:"beego"`
+type CallerTpl struct {
+	TplBeego CallerCfg `toml:"tplBeego"`
 }
 
 type CallerCfg struct {

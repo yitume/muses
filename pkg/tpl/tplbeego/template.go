@@ -1,4 +1,4 @@
-package beego
+package tplbeego
 
 // Copyright 2014 beego Author. All Rights Reserved.
 //
@@ -49,7 +49,7 @@ var (
 // writing the output to wr.
 // A template will be executed safely in parallel.
 func ExecuteTemplate(wr io.Writer, name string, data interface{}) error {
-	return ExecuteViewPathTemplate(wr, name, defaultCaller.cfg.Muses.Tmpl.Beego.ViewPath, data)
+	return ExecuteViewPathTemplate(wr, name, defaultCaller.cfg.Muses.Tpl.TplBeego.ViewPath, data)
 }
 
 // ExecuteViewPathTemplate applies the template with name and from specific viewPath to the specified data object,

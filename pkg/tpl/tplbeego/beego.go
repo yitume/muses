@@ -1,4 +1,4 @@
-package beego
+package tplbeego
 
 import (
 	"github.com/BurntSushi/toml"
@@ -7,11 +7,11 @@ import (
 )
 
 var defaultCaller = &callerStore{
-	Name: common.ModTmplBeegoName,
+	Name: common.ModTplBeegoName,
 	cfg: Cfg{
 		Muses: CallerMuses{
-			Tmpl: CallerTmpl{
-				Beego: CallerCfg{
+			Tpl: CallerTpl{
+				TplBeego: CallerCfg{
 					Debug:         false,
 					TplExt:        "tpl",
 					ViewPath:      "views",
@@ -32,8 +32,8 @@ func Register() common.Caller {
 	return defaultCaller
 }
 
-func Caller(tplPath string) (obj *Tmpl, err error) {
-	obj, err = provider(defaultCaller.cfg.Muses.Tmpl.Beego, tplPath)
+func Caller() (obj *Tmpl, err error) {
+	obj, err = provider(defaultCaller.cfg.Muses.Tpl.TplBeego)
 	if err != nil {
 		return
 	}
@@ -41,7 +41,7 @@ func Caller(tplPath string) (obj *Tmpl, err error) {
 }
 
 func Config() CallerCfg {
-	return defaultCaller.cfg.Muses.Tmpl.Beego
+	return defaultCaller.cfg.Muses.Tpl.TplBeego
 }
 
 func (c *callerStore) InitCfg(cfg []byte) error {
@@ -52,15 +52,15 @@ func (c *callerStore) InitCfg(cfg []byte) error {
 }
 
 func (c *callerStore) InitCaller() error {
-	if err := AddViewPath(c.cfg.Muses.Tmpl.Beego.ViewPath); err != nil {
+	if err := AddViewPath(c.cfg.Muses.Tpl.TplBeego.ViewPath); err != nil {
 		return err
 	}
 	return nil
 }
 
-func provider(cfg CallerCfg, tplPath string) (resp *Tmpl, err error) {
+func provider(cfg CallerCfg) (resp *Tmpl, err error) {
 	obj := &Tmpl{}
-	obj.Init(tplPath, cfg.TplExt, cfg.ViewPath)
+	obj.Init(cfg.TplExt, cfg.ViewPath)
 
 	return obj, err
 }

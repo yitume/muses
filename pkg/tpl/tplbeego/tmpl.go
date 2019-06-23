@@ -1,7 +1,8 @@
-package beego
+package tplbeego
 
 import (
 	"bytes"
+	"errors"
 	"html/template"
 )
 
@@ -22,13 +23,16 @@ type Tmpl struct {
 }
 
 // Init generates default values of controller operations.
-func (c *Tmpl) Init(tplPath, tplExt, viewPath string) {
+func (c *Tmpl) Init(tplExt, viewPath string) {
 	c.Data = make(map[interface{}]interface{}, 0)
 	c.Layout = ""
 	c.TplName = ""
-	c.tplPath = tplPath
 	c.TplExt = tplExt
 	c.ViewPath = viewPath
+}
+
+func (c *Tmpl) SetTplPath(tplPath string) {
+	c.tplPath = tplPath
 }
 
 // RenderBytes returns the bytes of rendered template string. Do not send out response.
@@ -61,6 +65,9 @@ func (c *Tmpl) RenderBytes() ([]byte, error) {
 
 func (c *Tmpl) renderTemplate() (bytes.Buffer, error) {
 	var buf bytes.Buffer
+	if c.tplPath == "" {
+		return buf, errors.New("tpl path is empty")
+	}
 	if c.TplName == "" {
 		c.TplName = c.tplPath + "." + c.TplExt
 	}

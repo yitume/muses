@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/yitume/muses"
-	"github.com/yitume/muses/pkg/tmpl/beego"
+	"github.com/yitume/muses/pkg/tpl/tplbeego"
 )
 
 var cfg = `
@@ -14,11 +14,11 @@ var cfg = `
 func main() {
 	if err := muses.Container(
 		[]byte(cfg),
-		beego.Register,
+		tplbeego.Register,
 	); err != nil {
 		panic(err)
 	}
-	obj, err := beego.Caller("index")
+	obj, err := tplbeego.Caller("index")
 	if err != nil {
 		fmt.Println("err------>", err)
 		return

@@ -1,4 +1,4 @@
-package beego
+package tplbeego
 
 import (
 	"net/http"
